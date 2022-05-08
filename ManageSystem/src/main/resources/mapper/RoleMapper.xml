@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace =>  mapper接口    类的全限定名 -->
+<mapper namespace="com.qcby.db.mapper.RoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.qcby.db.entity.SysRole">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="creat_time" jdbcType="DATE" property="creatTime"/>
+        <result column="update_time" jdbcType="DATE" property="updateTime"/>
+    </resultMap>
+
+
+
+    <resultMap id="RoleBaseResultMap" type="com.qcby.db.entity.SysUser">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="real_name" jdbcType="VARCHAR" property="realName"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="sex" jdbcType="INTEGER" property="sex"/>
+        <result column="photo" jdbcType="VARCHAR" property="photo"/>
+        <result column="admission_date" jdbcType="DATE" property="admissionDate"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="student_class_id" jdbcType="INTEGER" property="studentClassId"/>
+        <result column="institute_id" jdbcType="INTEGER" property="instituteId"/>
+        <result column="major_id" jdbcType="INTEGER" property="majorId"/>
+        <result column="creat_time" jdbcType="DATE" property="creatTime"/>
+        <result column="update_time" jdbcType="DATE" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="UserWithRoleBaseResultMap" type="com.qcby.db.entity.SysUser">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="real_name" jdbcType="VARCHAR" property="realName"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="sex" jdbcType="INTEGER" property="sex"/>
+        <result column="photo" jdbcType="VARCHAR" property="photo"/>
+        <result column="admission_date" jdbcType="DATE" property="admissionDate"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="student_class_id" jdbcType="INTEGER" property="studentClassId"/>
+        <result column="institute_id" jdbcType="INTEGER" property="instituteId"/>
+        <result column="major_id" jdbcType="INTEGER" property="majorId"/>
+        <result column="creat_time" jdbcType="DATE" property="creatTime"/>
+        <result column="update_time" jdbcType="DATE" property="updateTime"/>
+        <collection property="roleId" column="id" select="listDescriptionByUserId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, real_name, password, user_name, sex, photo, admission_date,
+        email, student_class_id, institute_id, major_id, creat_time, update_time
+    </sql>
+
+    <select id="listAll" parameterType="String" resultType="com.qcby.db.entity.SysRole">
+        select * from sys_role where role_name =
+        #{roleName} || description = #{description};
+    </select>
+
+    
+    <select id="myRole" resultType="com.qcby.db.entity.SysRole">
+        select id, role_name from sys_role where id in (
+            select role_id from ref_user_role where user_id = #{userId}
+            )
+    </select>
+
+
+
+    <delete id="deleteAllRoleMenu">
+        delete from ref_role_menu where role_id = #{roleId}
+    </delete>
+
+
+    <insert id="insertRoleMenu">
+        insert into ref_role_menu values
+        <foreach separator="," item="menuId" collection="menuIdList">(#{menuId}, #{roleId}) </foreach>
+    </insert>
+
+
+
+
+
+
+
+
+</mapper>

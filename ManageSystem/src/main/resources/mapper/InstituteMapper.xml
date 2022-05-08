@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace =>  mapper接口    类的全限定名 -->
+<mapper namespace="com.qcby.db.mapper.InstituteMapper">
+
+    <resultMap id="BaseResultMap" type="com.qcby.db.entity.DicInstituteInfo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="institute_name" jdbcType="VARCHAR" property="instituteName"/>
+        <result column="institute_description" jdbcType="VARCHAR" property="instituteDescription" />
+        <result column="create_time" jdbcType="DATE" property="createTime"/>
+        <result column="update_time" jdbcType="DATE" property="updateTime"/>
+    </resultMap>
+
+
+
+
+</mapper>

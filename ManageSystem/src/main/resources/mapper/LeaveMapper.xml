@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace =>  mapper接口    类的全限定名 -->
+<mapper namespace="com.qcby.db.mapper.LeaveMapper">
+
+    <resultMap id="BaseResultMap" type="com.qcby.db.entity.StudentLeave">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="student_user_id" jdbcType="BIGINT" property="studentUserId"/>
+        <result column="state" jdbcType="INTEGER" property="state" />
+        <result column="start_time" jdbcType="DATE" property="startTime"/>
+        <result column="end_time" jdbcType="DATE" property="endTime"/>
+        <result column="reason" jdbcType="VARCHAR" property="reason"/>
+        <result column="arrprove_user_id" jdbcType="BIGINT" property="arrproveUserId"/>
+        <result column="no_aprove_reason" jdbcType="VARCHAR" property="noAproveReason"/>
+        <result column="create_time" jdbcType="DATE" property="createTime"/>
+        <result column="update_time" jdbcType="DATE" property="updateTime"/>
+    </resultMap>
+
+    <select id="listAll" resultType="com.qcby.db.entity.StudentLeave">
+        SELECT id, arrprove_user_id, student_user_id, real_name studentName, state, start_time, end_time, reason, no_aprove_reason, create_time  FROM
+            (SELECT se.*, su.real_name FROM student_leave se
+            INNER JOIN sys_user su ON se.student_user_id = su.id) t1
+        <where>
+            1 = 1
+            <if test="studentName != null"> and studentName like concat('%', #{studentName}, '%') </if>
+
+            <if test="startTime != null"> and startTime like concat('%', #{startTime}, '%') </if>
+
+            <if test="endTime != null"> and endTime like concat('%', #{endTime}, '%') </if>
+
+        </where>
+    </select>
+
+    <update id="update">
+        update from student_leave set state = #{leave.state},
+        no_aprove_reason = #{leave.noAproveReason} where id = #{leave.id}
+    </update>
+
+
+
+</mapper>

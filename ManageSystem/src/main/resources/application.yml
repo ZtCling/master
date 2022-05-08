@@ -1,0 +1,59 @@
+## 端口号  上下文路径
+server:
+  port: 8080
+
+## 数据源配置
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://175.27.242.224:3306/msq_manage?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+    username: root
+    password: msydb0501
+
+  #邮箱验证码配置
+  mail:
+    #smtp服务主机  qq邮箱则为smtp.qq.com
+    host: smtp.qq.com
+    #服务协议
+    protocol: smtp
+    # 编码集
+    default-encoding: UTF-8
+    #发送邮件的账户
+    username: 1552709754@qq.com
+    #授权码
+    password: jdyshgpcqliahhae
+    test-connection: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+
+## mybatis 配置
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml #对应xml文件所在路径
+  type-aliases-package: com.qcby.db.entity; #对应实体类：
+  configuration:
+    map-underscore-to-camel-case: true
+###分页插件的配置
+#pagehelper:
+#  helperDialect: mysql
+#  reasonable: true # 修改默认值，自动优化参数
+
+swagger:
+  title: QCBY项目RESTful API
+  description: 开发人员太懒，没有写描述
+  version: 1.0
+  contactName: DB
+  contactEmail: 1552709754@qq.com
+  contactUrl:
+  basePackageRest: com.qcby.db.controller
+  termsOfServiceUrl:
+
+
+
+
+

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace =>  mapper接口    类的全限定名 -->
+<mapper namespace="com.qcby.db.mapper.AttendanceMapper">
+
+    <resultMap id="BaseResultMap" type="com.qcby.db.entity.StudentLessonAttendance">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="class_id" jdbcType="BIGINT" property="classId"/>
+        <result column="student_user_id" jdbcType="BIGINT" property="studentUserId"/>
+        <result column="teacher_user_id" jdbcType="BIGINT" property="teacherUserId" />
+        <result column="lesson_id" jdbcType="BIGINT" property="lessonId" />
+        <result column="state" jdbcType="INTEGER" property="state" />
+        <result column="create_time" jdbcType="DATE" property="createTime"/>
+        <result column="update_time" jdbcType="DATE" property="updateTime"/>
+    </resultMap>
+
+    <select id="listAll" resultType="com.qcby.db.entity.StudentLessonAttendance">
+        select state, teacherUserName, create_time, class_name className, subject lessonName, su.real_name studentUserName from
+            (select t2.*, sl.subject from
+                (select t1.*, dc.class_name from
+                    (select sa.*, su.real_name teacherUserName from student_lesson_attendance sa
+                    left join sys_user su on sa.teacher_user_id = su.id where sa.student_user_id = #{userId}) t1
+                        left join dic_class_info dc on t1.class_id = dc.id) t2
+                    left join student_lesson sl on t2.lesson_id = sl.id) t3
+                left join sys_user su on t3.student_user_id = su.id
+    </select>
+
+</mapper>

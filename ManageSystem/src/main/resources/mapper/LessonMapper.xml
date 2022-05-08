@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace =>  mapper接口    类的全限定名 -->
+<mapper namespace="com.qcby.db.mapper.LessonMapper">
+
+    <resultMap id="BaseResultMap" type="com.qcby.db.entity.StudentLesson">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="teacher_user_id" jdbcType="BIGINT" property="teacherUserId"/>
+        <result column="subject" jdbcType="VARCHAR" property="subject"/>
+        <result column="class_id" jdbcType="BIGINT" property="classId" />
+        <result column="start_time" jdbcType="DATE" property="startTime"/>
+        <result column="end_time" jdbcType="DATE" property="endTime"/>
+        <result column="creat_time" jdbcType="DATE" property="creatTime"/>
+        <result column="update_time" jdbcType="DATE" property="updateTime"/>
+    </resultMap>
+
+
+    <select id="listAll" resultType="com.qcby.db.entity.StudentLesson">
+        select t1.*, dc.class_name from
+            (select sl.*, su.real_name from student_lesson sl
+                inner join sys_user su on sl.teacher_user_id = su.id) t1
+                inner join dic_class_info dc on t1.class_id = dc.id
+    </select>
+
+    
+    <insert id="startCourse">
+        insert into student_lesson (subject, class_id, teacher_user_id)
+        values (#{subject}, #{classId}, #{teacherId})
+    </insert>
+
+
+
+
+</mapper>

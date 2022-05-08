@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace =>  mapper接口    类的全限定名 -->
+<mapper namespace="com.qcby.db.mapper.MajorMapper">
+
+    <resultMap id="BaseResultMap" type="com.qcby.db.entity.DicMajorInfo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="major_name" jdbcType="VARCHAR" property="majorName"/>
+        <result column="major_description" jdbcType="VARCHAR" property="majorDescription"/>
+        <result column="institute_id" jdbcType="BIGINT" property="instituteId" />
+        <result column="create_time" jdbcType="DATE" property="createTime"/>
+        <result column="update_time" jdbcType="DATE" property="updateTime"/>
+    </resultMap>
+
+
+    <select id="listAll" resultType="com.qcby.db.entity.DicMajorInfo">
+        select * from
+            (select dm.*, di.institute_name from dic_major_info dm
+            left join dic_institute_info di on dm.institute_id = di.id) t1
+        where t1.major_description=#{majorName} or t1.major_name=#{majorDescription}
+    </select>
+
+</mapper>

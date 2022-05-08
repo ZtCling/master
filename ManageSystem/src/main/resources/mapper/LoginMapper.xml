@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace =>  mapper接口    类的全限定名 -->
+<mapper namespace="com.qcby.db.mapper.LoginMapper">
+
+    <resultMap id="BaseResultMap" type="com.qcby.db.entity.SysUser">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="real_name" jdbcType="VARCHAR" property="realName"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="sex" jdbcType="INTEGER" property="sex"/>
+        <result column="photo" jdbcType="VARCHAR" property="photo"/>
+        <result column="admission_date" jdbcType="DATE" property="admissionDate"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="student_class_id" jdbcType="INTEGER" property="studentClassId"/>
+        <result column="institute_id" jdbcType="INTEGER" property="instituteId"/>
+        <result column="major_id" jdbcType="INTEGER" property="majorId"/>
+        <result column="creat_time" jdbcType="DATE" property="creatTime"/>
+        <result column="update_time" jdbcType="DATE" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="UserWithRoleBaseResultMap" type="com.qcby.db.entity.SysUser">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="real_name" jdbcType="VARCHAR" property="realName"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="sex" jdbcType="INTEGER" property="sex"/>
+        <result column="photo" jdbcType="VARCHAR" property="photo"/>
+        <result column="admission_date" jdbcType="DATE" property="admissionDate"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="student_class_id" jdbcType="INTEGER" property="studentClassId"/>
+        <result column="institute_id" jdbcType="INTEGER" property="instituteId"/>
+        <result column="major_id" jdbcType="INTEGER" property="majorId"/>
+        <result column="creat_time" jdbcType="DATE" property="creatTime"/>
+        <result column="update_time" jdbcType="DATE" property="updateTime"/>
+        <collection property="roleId" column="id" select="listRoleByUserId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, real_name, password, user_name, sex, photo, admission_date,
+        email, student_class_id, institute_id, major_id, creat_time, update_time
+    </sql>
+
+
+
+    <select id="login" parameterType="com.qcby.db.entity.SysUser" resultMap="BaseResultMap">
+        select * from sys_user where user_name = #{user.userName}
+                                 and password = #{user.password}
+    </select>
+
+    <update id="updatePassword" parameterType="java.lang.String">
+        update sys_user set password = #{password}
+    </update>
+
+    <update id="updatePersonMessage" parameterType="java.lang.String">
+        update sys_user set sex = #{sex}, email = #{email}, real_name = #{realName},
+                            photo = #{photo} where id = #{userId}
+    </update>
+
+
+<!--    <select id="listAllWithRole" parameterType="Long" resultMap="UserWithRoleBaseResultMap">-->
+<!--        select * from sys_user where id = #{id}-->
+<!--    </select>-->
+<!--    <select id="listRoleByUserId" resultType="String">-->
+<!--        select role_id from sys_role r-->
+<!--        left join ref_user_role rur on r.id = rur.role_id-->
+<!--        where rur.user_id = #{userId}-->
+<!--    </select>-->
+
+
+    <select id="listRole" parameterType="Long" resultType="Long">
+        select role_id from ref_user_role where user_id = #{userId}
+    </select>
+
+    <update id="forgetPassword">
+        update sys_user set password = #{password} where id = #{userId}
+    </update>
+
+
+
+    <select id="listAuth" resultType="String">
+        select menu_permission from sys_menu where id in (
+            select menu_id from ref_role_menu where role_id in (
+                select role_id from ref_user_role where user_id = #{userId}
+            )
+        )
+    </select>
+
+
+
+    <select id="getMenus" parameterType="Long" resultType="com.qcby.db.entity.SysMenu">
+        select * from sys_menu where id in (
+            select menu_id from ref_role_menu where role_id in (
+                select role_id from ref_user_role where user_id = #{userId}
+            )
+        )
+    </select>
+
+
+
+
+
+
+
+</mapper>

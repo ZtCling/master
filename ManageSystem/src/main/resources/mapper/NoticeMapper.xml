@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace =>  mapper接口    类的全限定名 -->
+<mapper namespace="com.qcby.db.mapper.NoticeMapper">
+
+    <resultMap id="BaseResultMap" type="com.qcby.db.entity.AdminNotification">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="release_time" jdbcType="DATE" property="releaseTime"/>
+        <result column="create_time" jdbcType="DATE" property="createTime"/>
+        <result column="update_time" jdbcType="DATE" property="updateTime"/>
+        <result column="state" jdbcType="BIGINT" property="state"/>
+    </resultMap>
+
+
+    <select id="noticeList" parameterType="Long" resultType="com.qcby.db.entity.AdminNotification">
+        select an.*, su.user_name
+        from admin_notification an
+                 inner join sys_user su
+                            on an.user_id = su.id
+        where su.id = #{userId}
+    </select>
+
+    <select id="listAll" parameterType="String" resultType="com.qcby.db.entity.AdminNotification">
+        select *
+        from admin_notification
+        <where>
+            <if test="content != null">
+                content like concat('%', #{content}, '%')
+            </if>
+
+            <if test="title != null">
+                title like concat('%', #{title}, '%')
+            </if>
+        </where>
+--            or release_time between  concat('%', #{releaseTime}, '%')
+
+    </select>
+
+
+    <update id="update" parameterType="String">
+        update admin_notification
+        set title   = #{title},
+            content = #{content},
+            state   = #{state}
+        where id = #{userId}
+    </update>
+
+
+    <delete id="delete">
+        delete
+        from admin_notification
+        where id = #{idList}
+    </delete>
+
+
+    <insert id="insert">
+        insert into admin_notification
+        set title = #{title},
+            content = #{content}, user_id = #{userId}, release_time = #{releaseTime},
+            create_time = #{createTime}, update_time = #{updateTime}, state = #{state}
+
+    </insert>
+
+
+
+</mapper>
